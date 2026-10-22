@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "一起走一小段路",
+  "short_name": "我们的小镇",
+  "description": "为两个人准备的一场生日小冒险",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#25223d",
+  "theme_color": "#25223d",
+  "lang": "zh-CN",
+  "icons": [{"src":"town-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

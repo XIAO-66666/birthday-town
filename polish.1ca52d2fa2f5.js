@@ -1,0 +1,9 @@
+/* Smooth pose changes without moving or replacing active multi-touch controls. */
+const polishedRenderBase=render;
+function poseSnapshot(){return [...document.querySelectorAll('[data-motion]')].map(el=>({id:el.dataset.motion,rect:el.getBoundingClientRect()}))}
+function polishScene(old=[]){if(!motionOff())for(const {id,rect}of old){const el=document.querySelector(`[data-motion="${id}"]`);if(!el)continue;const now=el.getBoundingClientRect(),scale=el.parentNode.getScreenCTM()?.a||1,dx=(rect.x-now.x)/scale,dy=(rect.y-now.y)/scale;if(Math.abs(dx)+Math.abs(dy)>.1){el.animate({translate:[`${dx}px ${dy}px`,'0px 0px']},{duration:180,easing:'cubic-bezier(.2,.7,.25,1)'});if(id==='puzzleActor'){el.classList.add('walking');setTimeout(()=>{if(el.isConnected)el.classList.remove('walking')},190)}}}document.querySelectorAll('.key').forEach(el=>el.innerHTML='<svg viewBox="0 0 30 20" width="29" height="20" aria-label="钥匙"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="m12 11 10 7m-4-10-3 4m7-1-3 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>');if(stage===4){const sc=document.querySelector('.scene');sc?.classList.toggle('cooperating',holding.size===2)}}
+render=function(){const before=poseSnapshot();polishedRenderBase();polishScene(before)};
+let artAnimation=0;function ambienceLoop(){cancelAnimationFrame(artAnimation);let previous=0;const loop=t=>{if(t-previous>80){previous=t;const moving=stage===4&&holding.size===2;document.querySelector('#girl')?.classList.toggle('happy',stage===1&&met);document.querySelector('.scene')?.classList.toggle('cooperating',moving);if(typeof updateDuskVisuals==='function')updateDuskVisuals()}artAnimation=requestAnimationFrame(loop)};artAnimation=requestAnimationFrame(loop)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(artAnimation);else ambienceLoop()});ambienceLoop();render();
+
+
